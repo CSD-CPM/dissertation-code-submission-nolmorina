@@ -14,7 +14,7 @@ pinned: false
 
 A Gradio web application for detecting fraudulent bank transactions using supervised machine learning. Built as part of a thesis project, the app covers the full pipeline from data exploration and feature engineering to model training, scoring, and version management.
 
-> **Dataset note:** The full training dataset (`all_transactions_2024.csv`, ~460k rows) is not included in this repository due to GitHub's 100 MB file size limit. A representative sample of 300,000 randomly selected rows (`data/sample_train_300k.csv`) is provided instead and can be used to train or reproduce the models. The fraud rate in the sample (1.79%) closely matches the full dataset (1.80%).
+> **Dataset note:** The full training dataset (`all_transactions_2024.csv`, ~460k rows) is not included in this repository due to GitHub's 100 MB file size limit. A representative sample of 300,000 randomly selected rows (`data/sample_train_300k.csv`) is provided instead and can be used to train or reproduce the models. The fraud rate in the sample (1.79%) closely matches the full dataset (1.80%). **Users are advised to use `data/sample_train_300k.csv` for training the model.**
 
 **Live demo:** https://huggingface.co/spaces/nolinjoo/fraud-detection
 

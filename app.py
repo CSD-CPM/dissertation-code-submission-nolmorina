@@ -775,9 +775,9 @@ with gr.Blocks(title=APP_TITLE) as demo:
             )
 
             with gr.Row():
-                t4_train = gr.File(label="Training CSV (2024 / dev set)",
+                t4_train = gr.File(label="Training CSV (labelled dev set)",
                                    file_types=[".csv"], type="filepath")
-                t4_test = gr.File(label="Test CSV (2025 / hold-out, optional)",
+                t4_test = gr.File(label="Test CSV (hold-out, optional)",
                                   file_types=[".csv"], type="filepath")
 
             with gr.Row():
