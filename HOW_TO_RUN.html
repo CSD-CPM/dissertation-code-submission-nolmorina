@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Run — Fraud Detection App</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:        #3b6ea5;
+      --blue-light:  #eaf1f9;
+      --blue-mid:    #c8ddf0;
+      --text:        #2c3e50;
+      --text-muted:  #5f7284;
+      --border:      #dce5ee;
+      --bg:          #f7f9fc;
+      --white:       #ffffff;
+      --green-light: #edfaf3;
+      --green:       #2d7a55;
+      --amber-light: #fdf6e3;
+      --amber:       #8a6500;
+      --code-bg:     #1c2b3a;
+      --code-text:   #cfe2f3;
+      --code-accent: #7ec8e3;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 15.5px;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 56px 24px 48px;
+      text-align: center;
+    }
+    .header-label {
+      display: inline-block;
+      background: var(--blue-light);
+      color: var(--blue);
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+    }
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+    header p {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ── Nav pills ── */
+    .nav {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 20px 24px 0;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+    }
+    .nav a {
+      display: inline-block;
+      padding: 10px 18px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .nav a:hover { color: var(--blue); border-bottom-color: var(--blue); }
+
+    /* ── Main layout ── */
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 52px 24px 80px;
+    }
+
+    /* ── Section dividers ── */
+    .section {
+      margin-bottom: 56px;
+    }
+    .section-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+    .section > h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+      letter-spacing: -0.2px;
+    }
+    .section > .section-intro {
+      color: var(--text-muted);
+      margin-bottom: 28px;
+      font-size: 15px;
+    }
+
+    /* ── Horizontal rule between major sections ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 56px 0;
+    }
+
+    /* ── Inline code ── */
+    code {
+      font-family: "SF Mono", "Fira Code", Consolas, "Courier New", monospace;
+      background: var(--blue-light);
+      color: var(--blue);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 0.875em;
+    }
+
+    /* ── Code blocks ── */
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-family: "SF Mono", "Fira Code", Consolas, "Courier New", monospace;
+      font-size: 13.5px;
+      overflow-x: auto;
+      line-height: 1.65;
+      margin: 10px 0;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    pre .accent { color: var(--code-accent); }
+    pre .muted  { color: #5a7f9a; }
+
+    /* ── File tree ── */
+    .filetree {
+      background: var(--code-bg);
+      color: #8bafc4;
+      border-radius: 8px;
+      padding: 18px 22px;
+      font-family: "SF Mono", "Fira Code", Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.9;
+      margin: 12px 0;
+    }
+    .filetree .hl      { color: var(--code-accent); }
+    .filetree .comment { color: #3d5a6e; }
+
+    /* ── Callout boxes ── */
+    .callout {
+      border-radius: 8px;
+      padding: 13px 18px;
+      margin: 14px 0;
+      font-size: 14.5px;
+      line-height: 1.6;
+    }
+    .callout-info  { background: var(--blue-light); color: #2a4f74; border-left: 3px solid var(--blue); }
+    .callout-green { background: var(--green-light); color: var(--green); border-left: 3px solid #4caf85; }
+    .callout-amber { background: var(--amber-light); color: var(--amber); border-left: 3px solid #d4a017; }
+
+    /* ── Steps ── */
+    .steps { position: relative; padding-left: 44px; }
+    .steps::before {
+      content: "";
+      position: absolute;
+      left: 15px;
+      top: 16px;
+      bottom: 16px;
+      width: 1px;
+      background: var(--border);
+    }
+    .step {
+      position: relative;
+      margin-bottom: 36px;
+    }
+    .step:last-child { margin-bottom: 0; }
+    .step-dot {
+      position: absolute;
+      left: -36px;
+      top: 2px;
+      width: 22px; height: 22px;
+      background: var(--white);
+      border: 2px solid var(--blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--blue);
+    }
+    .step h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .step p { color: var(--text-muted); margin-bottom: 8px; font-size: 15px; }
+    .step p:last-child { margin-bottom: 0; }
+
+    /* ── Platform grid ── */
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 10px 0;
+    }
+    .platform-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 13.5px;
+    }
+    .platform-card .os {
+      font-weight: 700;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 5px;
+    }
+    .platform-card p { color: var(--text); font-size: 13px; margin: 0; }
+
+    /* ── Tab items ── */
+    .tab-list { display: flex; flex-direction: column; gap: 1px; }
+    .tab-item {
+      background: var(--white);
+      border: 1px solid var(--border);
+      padding: 18px 22px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+    .tab-item:first-child { border-radius: 8px 8px 0 0; }
+    .tab-item:last-child  { border-radius: 0 0 8px 8px; }
+    .tab-item:only-child  { border-radius: 8px; }
+    .tab-n {
+      min-width: 26px; height: 26px;
+      background: var(--blue-light);
+      color: var(--blue);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .tab-body strong {
+      display: block;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 5px;
+      font-size: 0.95rem;
+    }
+    .tab-body p { color: var(--text-muted); font-size: 14.5px; margin: 0; }
+
+    /* ── Settings table ── */
+    .settings-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .settings-table th {
+      background: var(--bg);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      padding: 9px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .settings-table td {
+      padding: 10px 14px;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .settings-table tr:last-child td { border-bottom: none; }
+
+    /* ── Troubleshooting table ── */
+    .trouble-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .trouble-table th {
+      background: var(--blue-light);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 10px 16px;
+      text-align: left;
+    }
+    .trouble-table th:first-child { border-radius: 8px 0 0 0; }
+    .trouble-table th:last-child  { border-radius: 0 8px 0 0; }
+    .trouble-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+      vertical-align: top;
+    }
+    .trouble-table tr:nth-child(even) td { background: #fafbfd; }
+    .trouble-table tr:last-child td { border-bottom: none; }
+
+    /* ── Column pills ── */
+    .col-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .col-pill {
+      background: var(--code-bg);
+      color: var(--code-accent);
+      font-family: "SF Mono", "Fira Code", Consolas, monospace;
+      font-size: 12.5px;
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+
+    /* ── Online section ── */
+    .online-section {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 32px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .online-section .text h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .online-section .text p {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 420px;
+    }
+    .online-section a {
+      display: inline-block;
+      background: var(--blue-light);
+      color: var(--blue);
+      border: 1px solid var(--blue-mid);
+      padding: 10px 22px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      white-space: nowrap;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    .online-section a:hover { background: var(--blue-mid); }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 24px;
+      font-size: 13px;
+      color: #a0aeba;
+    }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.5rem; }
+      .platform-grid { grid-template-columns: 1fr; }
+      .online-section { flex-direction: column; text-align: center; }
+      .online-section a { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-label">Fraud Detection App</div>
+  <h1>How to Run</h1>
+  <p>This app runs locally on your computer or via a hosted online version. Running locally is strongly recommended — it is significantly faster and gives full control over training.</p>
+</header>
+
+<nav class="nav">
+  <a href="#local">Run Locally</a>
+  <a href="#steps">Setup Steps</a>
+  <a href="#tabs">Using the App</a>
+  <a href="#columns">CSV Columns</a>
+  <a href="#troubleshooting">Troubleshooting</a>
+  <a href="#online">Online Version</a>
+</nav>
+
+<main>
+
+  <!-- ── OPTION 1 ── -->
+  <div class="section" id="local">
+    <div class="section-label">Option 1 — Recommended</div>
+    <h2>Run Locally</h2>
+    <p class="section-intro">Running the app on your own machine gives you full speed and works after the first setup.</p>
+
+    <p style="margin-bottom:10px; color: var(--text-muted); font-size:15px;">Extract the ZIP file. You will get a folder called <code>Gradio</code> with the following contents:</p>
+    <div class="filetree">
+Gradio/<br>
+├── <span class="hl">app.py</span>                 <span class="comment">← the application</span><br>
+├── <span class="hl">requirements.txt</span>       <span class="comment">← packages to install</span><br>
+├── artifacts/             <span class="comment">← pre-trained model, ready to use immediately</span><br>
+├── src/                   <span class="comment">← source code</span><br>
+├── sample_transactions_50.csv<br>
+└── HOW_TO_RUN.md
+    </div>
+
+    <div class="callout callout-green" style="margin-top:16px;">
+      The <code>artifacts/</code> folder contains a trained model — the Fraud Scoring tab works immediately without training anything first.
+    </div>
+
+    <p style="margin-top:20px; color: var(--text-muted); font-size:15px;"><strong style="color:var(--text);">Requirements:</strong> Python 3.9 or newer (check with <code>python3 --version</code>) and pip, which is usually installed with Python. An internet connection is needed the first time to download packages.</p>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── STEPS ── -->
+  <div class="section" id="steps">
+    <div class="section-label">Setup</div>
+    <h2>Step-by-Step</h2>
+    <p class="section-intro">Follow these steps in order. You only need to install packages once.</p>
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-dot">1</div>
+        <h3>Open a Terminal</h3>
+        <div class="platform-grid">
+          <div class="platform-card">
+            <div class="os">Mac</div>
+            <p><code>Cmd + Space</code>, type Terminal, press Enter</p>
+          </div>
+          <div class="platform-card">
+            <div class="os">Windows</div>
+            <p>Windows key, type <code>cmd</code> or <code>PowerShell</code>, press Enter</p>
+          </div>
+          <div class="platform-card">
+            <div class="os">Linux</div>
+            <p><code>Ctrl + Alt + T</code></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-dot">2</div>
+        <h3>Navigate to the Gradio Folder</h3>
+        <pre><code>cd ~/Desktop/Gradio</code></pre>
+        <p>Confirm you are in the right place by running <code>ls</code> — you should see <code>app.py</code> listed.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-dot">3</div>
+        <h3>Install Packages</h3>
+        <p>Run this once. It takes 1–3 minutes — wait until the terminal prompt returns.</p>
+        <pre><code>pip install -r requirements.txt</code></pre>
+        <div class="callout callout-info">If <code>pip</code> is not found, try <code>pip3</code>. On Mac or Linux, add <code>--user</code> if you get a permissions error.</div>
+      </div>
+
+      <div class="step">
+        <div class="step-dot">4</div>
+        <h3>Start the App</h3>
+        <pre><code>python app.py</code></pre>
+        <div class="callout callout-info">If <code>python</code> is not found, try <code>python3</code>.</div>
+        <p>You will see this output when the app is ready:</p>
+        <pre><code>* Running on local URL:  http://127.0.0.1:7860</code></pre>
+      </div>
+
+      <div class="step">
+        <div class="step-dot">5</div>
+        <h3>Open in Your Browser</h3>
+        <p>Go to <code>http://127.0.0.1:7860</code> in any browser — Chrome, Firefox, Safari, or Edge.</p>
+        <div class="callout callout-amber">Keep the terminal open while you use the app. To stop it, press <code>Ctrl + C</code>.</div>
+      </div>
+
+    </div>
+
+    <p style="margin-top:32px; color: var(--text-muted); font-size:15px;"><strong style="color:var(--text);">Restarting later:</strong> Packages only need to be installed once. From Step 2 onwards next time, just navigate to the folder and run <code>python app.py</code>.</p>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── TABS ── -->
+  <div class="section" id="tabs">
+    <div class="section-label">Interface</div>
+    <h2>Using the App</h2>
+    <p class="section-intro">The app has five tabs, each covering a different part of the workflow.</p>
+
+    <div class="tab-list">
+      <div class="tab-item">
+        <div class="tab-n">1</div>
+        <div class="tab-body">
+          <strong>Fraud Scoring</strong>
+          <p>Upload any transaction CSV. Returns a fraud probability (0–1), a binary flag, and a risk label — Low, Review, or High — sorted highest risk first. A download link for the full scored CSV is provided. The <code>is_fraud</code> column is not required for scoring.</p>
+        </div>
+      </div>
+      <div class="tab-item">
+        <div class="tab-n">2</div>
+        <div class="tab-body">
+          <strong>Data Analysis</strong>
+          <p>Upload a CSV to run schema validation, quality checks, and a feature engineering preview. Use this before training to spot missing columns, duplicates, or data leakage.</p>
+        </div>
+      </div>
+      <div class="tab-item">
+        <div class="tab-n">3</div>
+        <div class="tab-body">
+          <strong>Visualizations</strong>
+          <p>Generates 25 interactive charts covering fraud patterns across time, amount, geography, merchant category, and customer profile. Charts that need <code>is_fraud</code> show a notice when that column is absent.</p>
+        </div>
+      </div>
+      <div class="tab-item">
+        <div class="tab-n">4</div>
+        <div class="tab-body">
+          <strong>Model Training</strong>
+          <p>Upload a labelled training CSV (must include <code>is_fraud</code>) and optionally a holdout test CSV. Choose your model families, set an alert budget, and click Train Models. The winning model is saved automatically and becomes active in the Scoring tab.</p>
+          <table class="settings-table">
+            <thead><tr><th>Setting</th><th>What it does</th></tr></thead>
+            <tbody>
+              <tr><td>Model families</td><td>Which algorithms to train</td></tr>
+              <tr><td>Alert budget</td><td>Top X% of transactions to flag — e.g. <code>0.01</code> = top 1%</td></tr>
+              <tr><td>Max training rows</td><td>Cap data size — set <code>0</code> to use all rows</td></tr>
+              <tr><td>Fast mode</td><td>Fewer trees, skips linear models — useful for a quick test run</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="tab-item">
+        <div class="tab-n">5</div>
+        <div class="tab-body">
+          <strong>Model Management</strong>
+          <p>Browse all previously trained model versions and activate any of them with one click. Use this to roll back if a new training run underperforms.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── COLUMNS ── -->
+  <div class="section" id="columns">
+    <div class="section-label">Data Format</div>
+    <h2>Required CSV Columns</h2>
+    <p class="section-intro">All uploaded CSVs must contain these 13 columns. The file can be comma or pipe delimited — the separator is detected automatically.</p>
+
+    <div class="col-grid">
+      <span class="col-pill">trans_date</span>
+      <span class="col-pill">trans_time</span>
+      <span class="col-pill">amt</span>
+      <span class="col-pill">category</span>
+      <span class="col-pill">gender</span>
+      <span class="col-pill">state</span>
+      <span class="col-pill">dob</span>
+      <span class="col-pill">lat</span>
+      <span class="col-pill">long</span>
+      <span class="col-pill">merch_lat</span>
+      <span class="col-pill">merch_long</span>
+      <span class="col-pill">city_pop</span>
+      <span class="col-pill">profile</span>
+    </div>
+
+    <div class="callout callout-info" style="margin-top:18px;">
+      <code>is_fraud</code> is <strong>optional for scoring</strong> and <strong>required for training</strong>. If present during scoring it is carried through to the output unchanged.
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── TROUBLESHOOTING ── -->
+  <div class="section" id="troubleshooting">
+    <div class="section-label">Help</div>
+    <h2>Troubleshooting</h2>
+    <p class="section-intro">Common problems and how to resolve them.</p>
+
+    <table class="trouble-table">
+      <thead>
+        <tr><th>Problem</th><th>Solution</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>python: command not found</code></td>
+          <td>Use <code>python3</code> instead of <code>python</code></td>
+        </tr>
+        <tr>
+          <td><code>pip: command not found</code></td>
+          <td>Use <code>pip3</code> instead of <code>pip</code></td>
+        </tr>
+        <tr>
+          <td>Port already in use</td>
+          <td>Another app is using port 7860 — close it or restart your computer</td>
+        </tr>
+        <tr>
+          <td><code>ModuleNotFoundError</code></td>
+          <td>Re-run <code>pip install -r requirements.txt</code></td>
+        </tr>
+        <tr>
+          <td>Page not loading in browser</td>
+          <td>Check the terminal still shows <code>Running on local URL</code> — it must stay open</td>
+        </tr>
+        <tr>
+          <td>Upload fails with missing columns error</td>
+          <td>Check the CSV contains all 13 required columns listed above</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── OPTION 2 ONLINE ── -->
+  <div class="section" id="online">
+    <div class="section-label">Option 2</div>
+    <h2>Online Version</h2>
+    <p class="section-intro">No installation or account needed. Open the link and start using the app immediately.</p>
+
+    <div class="online-section">
+      <div class="text">
+        <h2>Hosted on Hugging Face Spaces</h2>
+        <p>A pre-trained model is already loaded. Note that this version runs on free-tier hardware and can be noticeably slow, especially during model training. Best suited for a quick look at the interface.</p>
+      </div>
+      <a href="https://huggingface.co/spaces/nolinjoo/fraud-detection" target="_blank">Open App</a>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Fraud Detection App &nbsp;&middot;&nbsp; Thesis Project &nbsp;&middot;&nbsp; Arbnor Morina
+</footer>
+
+</body>
+</html>
