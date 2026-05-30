@@ -1,0 +1,2 @@
+config,score_type,valid_pr_auc,valid_roc_auc,test_pr_auc,test_roc_auc,valid_brier,valid_ece,test_brier,test_ece
+prior,probability,0.010244611811690145,0.5,0.039957083132931295,0.5,0.01023437264277987,0.009732055397599559,0.03875973166092102,0.019980415923641595
