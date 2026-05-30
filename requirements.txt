@@ -1,0 +1,6 @@
+gradio==6.13.0
+joblib
+numpy
+pandas
+plotly>=6.0
+scikit-learn==1.5.1

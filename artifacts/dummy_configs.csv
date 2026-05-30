@@ -1,0 +1,2 @@
+model,config,score_type,valid_pr_auc,valid_roc_auc,valid_brier,valid_ece
+Dummy,prior,probability,0.019881492414212228,0.5,0.019491573600509994,0.002314071501520274

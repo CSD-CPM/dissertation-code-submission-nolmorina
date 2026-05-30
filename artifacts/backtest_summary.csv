@@ -1,0 +1,7 @@
+model,mean_pr_auc,std_pr_auc,mean_roc_auc,std_roc_auc
+ExtraTrees,0.6941,0.1694,0.9355,0.0711
+RandomForest,0.6659,0.1632,0.9242,0.0747
+SGDClassifier,0.1577,0.1477,0.773,0.044
+LogisticRegression,0.1099,0.1447,0.664,0.1127
+LinearSVC,0.0836,0.1099,0.6193,0.0875
+Dummy,0.0175,0.0053,0.5,0.0

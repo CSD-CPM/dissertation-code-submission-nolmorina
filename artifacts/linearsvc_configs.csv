@@ -1,0 +1,4 @@
+model,config,score_type,valid_pr_auc,valid_roc_auc,valid_brier,valid_ece
+LinearSVC,c_0.5,decision,0.6007841564534719,0.9537622946840587,,
+LinearSVC,c_1.0,decision,0.5965795646305195,0.9497388381419005,,
+LinearSVC,c_2.0,decision,0.5925673032706693,0.944803316241743,,
